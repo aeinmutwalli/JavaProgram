@@ -1,0 +1,61 @@
+/**
+ * 
+ */
+package com.mystore.testcases;
+
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.mystore.base.BaseClass;
+import com.mystore.dataprovider.DataProviders;
+import com.mystore.pageobjects.HomePage;
+import com.mystore.pageobjects.IndexPage;
+import com.mystore.pageobjects.LoginPage;
+import com.mystore.utility.Log;
+
+/**
+ * @author ManishGupta
+ *
+ */
+public class HomePageTest extends BaseClass {
+	IndexPage indexPage;
+	LoginPage loginPage;
+	HomePage homePage;
+
+
+	@BeforeMethod
+	public void setup() {
+		launchApp(); 
+	}
+	
+	@AfterMethod
+	public void tearDown() {
+		driver.quit();
+	}
+	
+	@Test(dataProvider = "credentials", dataProviderClass = DataProviders.class)
+	public void wishListTest(String uname, String pswd) throws Throwable {
+		Log.startTestCase("wishListTest");
+		indexPage= new IndexPage();
+		loginPage=indexPage.clickOnSignIn();
+//		homePage=loginPage.login(prop.getProperty("username"), prop.getProperty("password"));
+		homePage=loginPage.login(uname,pswd);
+		boolean result=homePage.validateMyWishList();
+		Assert.assertTrue(result);
+		Log.endTestCase("wishListTest");
+	}
+	
+	@Test(dataProvider = "credentials", dataProviderClass = DataProviders.class)
+	public void orderHistoryandDetailsTest(String uname, String pswd) throws Throwable {
+		Log.startTestCase("orderHistoryandDetailsTest");
+		indexPage= new IndexPage();
+		loginPage=indexPage.clickOnSignIn();
+//		homePage=loginPage.login(prop.getProperty("username"), prop.getProperty("password"));
+		homePage=loginPage.login(uname,pswd);
+		boolean result=homePage.validateOrderHistory();
+		Assert.assertTrue(result);
+		Log.endTestCase("orderHistoryandDetailsTest");
+	}
+}
